@@ -4,5 +4,5 @@ set -o errexit
 set -o pipefail
 
 sudo apt-get update
-echo | sudo apt-get install -y libssl-dev tshark aircrack-ng iw
+DEBIAN_FRONTEND=noninteractive sudo apt-get install -y libssl-dev tshark aircrack-ng iw
 sudo airmon-ng start wlan0
