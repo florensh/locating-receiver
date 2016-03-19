@@ -16,3 +16,15 @@ ts.stderr.on('data', function(data) {
 ts.on('exit', function(code) {
   console.log('child process exited with code ' + code);
 });
+
+am.stdout.on('data', function(data) {
+  console.log('stdout: ' + data);
+});
+
+am.stderr.on('data', function(data) {
+  console.log('stderr: ' + data);
+});
+
+am.on('exit', function(code) {
+  console.log('child process exited with code ' + code);
+});
