@@ -6,9 +6,8 @@ exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
     // print the output
     sys.puts(stdout);
     var spawn = require('child_process').spawn,
-    // am = spawn('airmon-ng', ['start', 'wlan1']),
-    ts = spawn('tshark', ['-i', 'mon0', '-I', '-f', 'broadcast', '-Y', 'wlan.fc.type == 0 && wlan.fc.subtype == 4', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
-    // ts = spawn('tshark', ['-i', 'mon0']);
+      ts = spawn('tshark', ['-i', 'mon0', '-I', '-f', 'broadcast', '-Y', 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan.sa == d0:e1:40:73:89:7c', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
+
     ts.stdout.on('data', function(data) {
       console.log('stdout: ' + data);
     });
@@ -24,21 +23,3 @@ exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
     // handle error
   }
 });
-
-
-
-
-
-
-
-// am.stdout.on('data', function(data) {
-//   console.log('stdout: ' + data);
-// });
-//
-// am.stderr.on('data', function(data) {
-//   console.log('stderr: ' + data);
-// });
-//
-// am.on('exit', function(code) {
-//   console.log('child process exited with code ' + code);
-// });
