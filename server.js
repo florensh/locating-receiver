@@ -1,8 +1,9 @@
 console.log('starting tshark');
 var spawn = require('child_process').spawn,
   am = spawn('airmon-ng', ['start', 'wlan0']),
-  ts = spawn('tshark', ['-i', 'mon0', '-I', '-f', 'broadcast', '-R', 'wlan.fc.type == 0 && wlan.fc.subtype == 4', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
+  // ts = spawn('tshark', ['-i', 'mon0', '-I', '-f', 'broadcast', '-R', 'wlan.fc.type == 0 && wlan.fc.subtype == 4', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
 
+  ts = spawn('tshark', ['-i', 'mon0']);
 
 
 ts.stdout.on('data', function(data) {
