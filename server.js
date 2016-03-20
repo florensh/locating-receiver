@@ -23,21 +23,21 @@ exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
 
 
 
-    var http = require('http');
-
-    var options = {
-      host: 'https://young-beach-90165.herokuapp.com',
-      path: '/signal',
-      method: 'POST'
-    };
-
-    callback = function(response) {
-
-    }
-
-    var req = http.request(options, callback);
-    req.write({"mac": "d0:e1:40:73:89:7c"});
-    req.end();
+    // var http = require('http');
+    //
+    // var options = {
+    //   host: 'https://young-beach-90165.herokuapp.com',
+    //   path: '/signal',
+    //   method: 'POST'
+    // };
+    //
+    // callback = function(response) {
+    //
+    // }
+    //
+    // var req = http.request(options, callback);
+    // req.write("{'mac': 'd0:e1:40:73:89:7c'}");
+    // req.end();
 
 
 
