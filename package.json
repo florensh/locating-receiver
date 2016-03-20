@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/florensh/locating-receiver/issues"
   },
-  "homepage": "https://github.com/florensh/locating-receiver#readme"
+  "homepage": "https://github.com/florensh/locating-receiver#readme",
+  "dependencies": {
+    "request": "^2.69.0"
+  }
 }
