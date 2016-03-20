@@ -7,7 +7,7 @@ exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
     sys.puts(stdout);
     var spawn = require('child_process').spawn,
     // am = spawn('airmon-ng', ['start', 'wlan1']),
-    ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan.addr == d0:e1:40:73:89:7c', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
+    ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', 'wlan.fc.type == 0 and wlan.fc.subtype == 4 and wlan.addr == d0:e1:40:73:89:7c', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
     // ts = spawn('tshark', ['-i', 'mon0']);
     ts.stdout.on('data', function(data) {
       console.log('stdout: ' + data);
