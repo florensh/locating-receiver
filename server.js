@@ -21,7 +21,7 @@ var runCapturing = function(callback) {
   var spawn = require('child_process').spawn,
     ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
   ts.stdout.on('data', function(data) {
-    callback(data);
+    console.log(data);
   });
 
   ts.stderr.on('data', function(data) {
@@ -62,14 +62,11 @@ var resolveMacsToFilter = function(callback) {
       macs = _.map(devices, function(d) {
         return d.mac;
       })
-      console.log(macs)
       callback();
     }
   })
 }
 
 resolveMacsToFilter(function() {
-  runCapturing(function(data) {
-    console.log(data);
-  })
+  runCapturing()
 });
