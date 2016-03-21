@@ -1,10 +1,25 @@
 console.log('starting receiver');
 
+var macs = [];
+
+var _ = require('lodash');
 var exec = require('child_process').exec;
 
 var runCapturing = function(callback) {
+
+  var concat = function(one, two) {
+    return one + two;
+  };
+
+  var makeFilter = function(m) {
+    return ' || wlan.sa == ' + m;
+  };
+
+  var macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
+  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter;
+  console.log(filter);
   var spawn = require('child_process').spawn,
-    ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan.sa == d0:e1:40:73:89:7c', '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
+    ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
   ts.stdout.on('data', function(data) {
     callback(data);
   });
@@ -24,24 +39,37 @@ var runCapturing = function(callback) {
   });
 }
 
-runCapturing(function(data) {
-  console.log(data);
-});
-
-
 var request = require('request');
 
+var resolveMacsToFilter = function(callback) {
+  // Configure the request
+  var options = {
+    url: 'https://young-beach-90165.herokuapp.com/people',
+    method: 'GET'
+  }
 
-// Configure the request
-var options = {
-  url: 'https://young-beach-90165.herokuapp.com/people',
-  method: 'GET'
+  // Start the request
+  request(options, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var people = JSON.parse(body)._embedded.people;
+      var devices = _.flatMap(people, function(p) {
+        return _.filter(p.devices, function(d) {
+          return d.enabled;
+        });
+      });
+
+      // Print out the response body
+      macs = _.map(devices, function(d) {
+        return d.mac;
+      })
+      console.log(macs)
+      callback();
+    }
+  })
 }
 
-// Start the request
-request(options, function(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    // Print out the response body
-    console.log(body)
-  }
-})
+resolveMacsToFilter(function() {
+  runCapturing(function(data) {
+    console.log(data);
+  })
+});
