@@ -1,7 +1,7 @@
 console.log('starting receiver');
 
 var macs = [];
-
+var readline = require('linebyline');
 var _ = require('lodash');
 var exec = require('child_process').exec;
 
@@ -20,9 +20,26 @@ var runCapturing = function(callback) {
   console.log(filter);
   var spawn = require('child_process').spawn,
     ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
-  ts.stdout.on('data', function(data) {
-    console.log(data);
+
+
+
+  // ts.stdout.on('data', function(data) {
+  //   var str = data.toString(),
+  //     lines = str.split(/(\r?\n)/g);
+  //   for (var i = 0; i < lines.length; i++) {
+  //     console.log(lines[i]);
+  //   }
+  // });
+
+  readline.createInterface({
+    input: ts.stdout,
+    terminal: false
+  }).on('line', function(line) {
+    console.log(line);
   });
+
+
+
 
   ts.stderr.on('data', function(data) {
     console.log('stderr: ' + data);

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/florensh/locating-receiver#readme",
   "dependencies": {
+    "linebyline": "^1.3.0",
     "lodash": "^4.6.1",
     "request": "^2.69.0"
   }
