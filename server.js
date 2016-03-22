@@ -1,7 +1,7 @@
 console.log('starting receiver');
 
 var macs = [];
-var readline = require('linebyline');
+var readline = require('readline');
 var _ = require('lodash');
 var exec = require('child_process').exec;
 
@@ -30,6 +30,8 @@ var runCapturing = function(callback) {
   //     console.log(lines[i]);
   //   }
   // });
+
+
 
   readline.createInterface({
     input: ts.stdout,
