@@ -1,6 +1,7 @@
 console.log('starting receiver');
 
 var macs = [];
+var lastSent = {};
 var readline = require('readline');
 var _ = require('lodash');
 var exec = require('child_process').exec;
@@ -22,21 +23,12 @@ var runCapturing = function(callback) {
     ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
 
 
-
-  // ts.stdout.on('data', function(data) {
-  //   var str = data.toString(),
-  //     lines = str.split(/(\r?\n)/g);
-  //   for (var i = 0; i < lines.length; i++) {
-  //     console.log(lines[i]);
-  //   }
-  // });
-
-
-
   readline.createInterface({
     input: ts.stdout,
     terminal: false
   }).on('line', function(line) {
+    var a = line.split(' ');
+    sendToBackand(a[0], a[1], a[2])
     console.log(line);
   });
 
@@ -80,7 +72,12 @@ var resolveMacsToFilter = function(callback) {
       // Print out the response body
       macs = _.map(devices, function(d) {
         return d.mac;
-      })
+      });
+
+      _(macs).forEach(function(m) {
+        lastSent[m] = null;
+      });
+
       callback();
     }
   })
@@ -89,3 +86,33 @@ var resolveMacsToFilter = function(callback) {
 resolveMacsToFilter(function() {
   runCapturing()
 });
+
+
+var sendToBackand = function(timestamp, mac, rssi) {
+
+  var t = Date.now();
+  t.setSeconds(t.getSeconds() - 10);
+
+  if (!lastSent[mac] || lastSent[mac] > t) {
+    lastSent[mac] = Date.now();
+    request({
+      url: 'https://young-beach-90165.herokuapp.com/signals',
+      method: 'POST',
+
+      json: {
+        rssi: rssi,
+        mac: mac,
+        timestamp: new Date(Number(timestamp))
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(response.statusCode, body);
+      }
+    });
+
+  }
+
+
+}
