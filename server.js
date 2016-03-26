@@ -92,9 +92,9 @@ resolveMacsToFilter(function() {
 var sendToBackand = function(timestamp, mac, rssi) {
 
   var t = new Date();
-  t.setSeconds(t.getSeconds() - 10);
+  t.setSeconds(t.getSeconds() - 300);
 
-  if (!lastSent[mac] || lastSent[mac] > t) {
+  if (!lastSent[mac] || lastSent[mac] < t) {
     lastSent[mac] = new Date();
     request({
       url: 'https://young-beach-90165.herokuapp.com/signals',
