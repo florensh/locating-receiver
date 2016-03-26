@@ -28,8 +28,9 @@ var runCapturing = function(callback) {
     terminal: false
   }).on('line', function(line) {
     var a = line.toString().split("\t");
+    var rssi = a[2].split(",");
     console.log(a);
-    sendToBackand(a[0], a[1], a[2])
+    sendToBackand(a[0], a[1], rssi[0])
     console.log(line);
   });
 
