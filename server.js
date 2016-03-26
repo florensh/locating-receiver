@@ -104,7 +104,7 @@ var sendToBackand = function(timestamp, mac, rssi) {
       json: {
         rssi: rssi,
         mac: mac,
-        timestamp: new Date(Number(timestamp))
+        timestamp: new Date(Number(timestamp * 1000))
       }
     }, function(error, response, body) {
       if (error) {
