@@ -18,9 +18,9 @@ var runCapturing = function(callback) {
 
   var macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
   var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter;
-  console.log(filter);
+  console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
-    ts = spawn('tshark', ['-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
+    ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
 
 
   readline.createInterface({
@@ -29,9 +29,8 @@ var runCapturing = function(callback) {
   }).on('line', function(line) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
-    console.log(a);
+    console.log('Device detected: ' + line);
     sendToBackand(a[0], a[1], rssi[0])
-    console.log(line);
   });
 
 
