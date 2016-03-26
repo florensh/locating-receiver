@@ -27,7 +27,8 @@ var runCapturing = function(callback) {
     input: ts.stdout,
     terminal: false
   }).on('line', function(line) {
-    var a = line.split(' ');
+    var a = line.toString().split(" ");
+    console.log(a);
     sendToBackand(a[0], a[1], a[2])
     console.log(line);
   });
