@@ -33,9 +33,6 @@ var runCapturing = function(callback) {
     sendToBackand(a[0], a[1], rssi[0])
   });
 
-
-
-
   ts.stderr.on('data', function(data) {
     console.log('stderr: ' + data);
   });
