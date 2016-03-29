@@ -92,7 +92,7 @@ var sendToBackand = function(timestamp, mac, rssi) {
   var hours = t.getHours();
   var mins = t.getMinutes();
   var day = t.getDay();
-  if (hours < 0 && hours > 7) {
+  if (hours > 8) {
     t.setSeconds(t.getSeconds() - 300);
 
     if (!lastSent[mac] || lastSent[mac] < t) {
