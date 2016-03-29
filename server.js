@@ -89,27 +89,34 @@ resolveMacsToFilter(function() {
 var sendToBackand = function(timestamp, mac, rssi) {
 
   var t = new Date();
-  t.setSeconds(t.getSeconds() - 300);
+  var hours = d.getHours();
+  var mins = d.getMinutes();
+  var day = d.getDay();
+  if (hours < 0 && hours > 7) {
+    t.setSeconds(t.getSeconds() - 300);
 
-  if (!lastSent[mac] || lastSent[mac] < t) {
-    lastSent[mac] = new Date();
-    request({
-      url: 'https://young-beach-90165.herokuapp.com/signals',
-      method: 'POST',
+    if (!lastSent[mac] || lastSent[mac] < t) {
+      lastSent[mac] = new Date();
+      request({
+        url: 'https://young-beach-90165.herokuapp.com/signals',
+        method: 'POST',
 
-      json: {
-        rssi: rssi,
-        mac: mac,
-        timestamp: new Date()
-      }
-    }, function(error, response, body) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(response.statusCode, body);
-      }
-    });
+        json: {
+          rssi: rssi,
+          mac: mac,
+          timestamp: new Date()
+        }
+      }, function(error, response, body) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(response.statusCode, body);
+        }
+      });
 
+    }
+  } else {
+    console.log('skipping because of time range');
   }
 
 
