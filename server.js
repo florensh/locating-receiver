@@ -89,9 +89,9 @@ resolveMacsToFilter(function() {
 var sendToBackand = function(timestamp, mac, rssi) {
 
   var t = new Date();
-  var hours = d.getHours();
-  var mins = d.getMinutes();
-  var day = d.getDay();
+  var hours = t.getHours();
+  var mins = t.getMinutes();
+  var day = t.getDay();
   if (hours < 0 && hours > 7) {
     t.setSeconds(t.getSeconds() - 300);
 
