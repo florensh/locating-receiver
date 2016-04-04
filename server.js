@@ -17,8 +17,14 @@ var runCapturing = function(callback) {
     return ' || wlan.sa == ' + m;
   };
 
-  var macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
-  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + useMacFilter?macFilter:'';
+  var macFilter;
+  if(useMacFilter){
+    macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
+
+  }else{
+    macFilter = '';
+  }
+  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + usmacFilter;
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
     ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
@@ -117,7 +123,7 @@ var sendToBackand = function(timestamp, mac, rssi) {
 
     }
   } else {
-    console.log('skipping because of time range');
+    console.log('skipping - backend in sleep mode!');
   }
 
 
