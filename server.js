@@ -19,8 +19,10 @@ var runCapturing = function(callback) {
 
   var macFilter;
   var filterCondition;
+  console.log(exploreMode);
   if(exploreMode){
     filterCondition = '&& !';
+    console.log('running in explore mode!');
   }else{
     filterCondition = '&& ';
   }
@@ -38,7 +40,7 @@ var runCapturing = function(callback) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
-    // sendToBackand(a[0], a[1], rssi[0])
+    sendToBackand(a[0], a[1], rssi[0])
   });
 
   ts.stderr.on('data', function(data) {
