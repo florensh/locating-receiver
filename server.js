@@ -35,10 +35,10 @@ var runCapturing = function(callback) {
     terminal: false
   }).on('line', function(line) {
     console.log('hier ist die line: ' + line.toString());
-    var a = line.toString().split("\t");
-    var rssi = a[2].split(",");
-    console.log('Device detected: ' + line);
-    sendToBackand(a[0], a[1], rssi[0])
+    // var a = line.toString().split("\t");
+    // var rssi = a[2].split(",");
+    // console.log('Device detected: ' + line);
+    // sendToBackand(a[0], a[1], rssi[0])
   });
 
   ts.stderr.on('data', function(data) {
