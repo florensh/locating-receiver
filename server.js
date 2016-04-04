@@ -34,7 +34,7 @@ var runCapturing = function(callback) {
     input: ts.stdout,
     terminal: false
   }).on('line', function(line) {
-    console.log(line.toString());
+    console.log('hier ist die line: ' + line.toString());
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
