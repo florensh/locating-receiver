@@ -1,6 +1,6 @@
 console.log('starting receiver');
 
-var useMacFilter = true;
+var exploreMode = process.env.explore;
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -18,12 +18,13 @@ var runCapturing = function(callback) {
   };
 
   var macFilter;
-  if(useMacFilter){
-    macFilter = '&& !(wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
-
+  var filterCondition;
+  if(exploreMode){
+    filterCondition = '&& !';
   }else{
-    macFilter = '';
+    filterCondition = '&& ';
   }
+  macFilter = filterCondition + '(wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
   var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter;
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
@@ -34,8 +35,8 @@ var runCapturing = function(callback) {
     input: ts.stdout,
     terminal: false
   }).on('line', function(line) {
-    // var a = line.toString().split("\t");
-    // var rssi = a[2].split(",");
+    var a = line.toString().split("\t");
+    var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
     // sendToBackand(a[0], a[1], rssi[0])
   });
