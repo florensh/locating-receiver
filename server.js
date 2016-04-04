@@ -1,5 +1,6 @@
 console.log('starting receiver');
 
+var useMacFilter = false;
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -17,7 +18,7 @@ var runCapturing = function(callback) {
   };
 
   var macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
-  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter;
+  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + useMacFilter?macFilter:'';
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
     ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal']);
