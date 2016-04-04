@@ -1,6 +1,6 @@
 console.log('starting receiver');
 
-var useMacFilter = false;
+var useMacFilter = true;
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -19,7 +19,7 @@ var runCapturing = function(callback) {
 
   var macFilter;
   if(useMacFilter){
-    macFilter = '&& (wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
+    macFilter = '&& !(wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
 
   }else{
     macFilter = '';
@@ -34,10 +34,9 @@ var runCapturing = function(callback) {
     input: ts.stdout,
     terminal: false
   }).on('line', function(line) {
-    console.log('hier ist die line: ' + line.toString());
     // var a = line.toString().split("\t");
     // var rssi = a[2].split(",");
-    // console.log('Device detected: ' + line);
+    console.log('Device detected: ' + line);
     // sendToBackand(a[0], a[1], rssi[0])
   });
 
