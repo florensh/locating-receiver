@@ -1,6 +1,6 @@
 console.log('starting receiver');
 
-var exploreMode = process.env.explore;
+var mode = process.env.mode;
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -19,10 +19,9 @@ var runCapturing = function(callback) {
 
   var macFilter;
   var filterCondition;
-  console.log(exploreMode);
-  if(exploreMode){
+  console.log('running in mode ' + mode);
+  if(mode && mode==='explore'){
     filterCondition = '&& !';
-    console.log('running in explore mode!');
   }else{
     filterCondition = '&& ';
   }
@@ -40,7 +39,9 @@ var runCapturing = function(callback) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
-    sendToBackand(a[0], a[1], rssi[0])
+      if(mode && mode==='normal'){
+        sendToBackand(a[0], a[1], rssi[0]);
+      }
   });
 
   ts.stderr.on('data', function(data) {
