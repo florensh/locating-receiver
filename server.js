@@ -20,9 +20,9 @@ var runCapturing = function(callback) {
   var macFilter;
   var filterCondition;
   console.log('running in mode ' + mode);
-  if(mode && mode==='explore'){
+  if (mode && mode === 'explore') {
     filterCondition = '&& !';
-  }else{
+  } else {
     filterCondition = '&& ';
   }
   macFilter = filterCondition + '(wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
@@ -39,9 +39,9 @@ var runCapturing = function(callback) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
-      if(mode && mode==='normal'){
-        sendToBackand(a[0], a[1], rssi[0]);
-      }
+    if (mode && mode === 'normal') {
+      sendToBackand(a[0], a[1], rssi[0]);
+    }
   });
 
   ts.stderr.on('data', function(data) {
@@ -92,8 +92,15 @@ var resolveMacsToFilter = function(callback) {
   })
 }
 
-resolveMacsToFilter(function() {
-  runCapturing()
+var cleanUp = function(callback) {
+  exec('sudo rm -r /tmp/*', function(error, stdout, stderr) {
+    callback();
+  });
+}
+cleanUp(function() {
+  resolveMacsToFilter(function() {
+    runCapturing()
+  });
 });
 
 
