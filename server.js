@@ -26,7 +26,7 @@ var runCapturing = function(callback) {
     filterCondition = '&& ';
   }
   macFilter = filterCondition + '(wlan.sa == ' + _.head(macs) + _.reduce(_.map(_.tail(macs), makeFilter), concat) + ')';
-  var filter = 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter;
+  var filter = mode == 'normal' ? ('wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter) : 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ';
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
     ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal', '-e', 'wlan.sa_resolved']);
@@ -40,7 +40,7 @@ var runCapturing = function(callback) {
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
     // if (mode && mode === 'normal') {
-      sendToBackand(a[0], a[1], rssi[0]);
+    sendToBackand(a[0], a[1], rssi[0]);
     // }
   });
 
