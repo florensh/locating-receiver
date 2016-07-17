@@ -39,9 +39,9 @@ var runCapturing = function(callback) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
-    if (mode && mode === 'normal') {
+    // if (mode && mode === 'normal') {
       sendToBackand(a[0], a[1], rssi[0]);
-    }
+    // }
   });
 
   ts.stderr.on('data', function(data) {
