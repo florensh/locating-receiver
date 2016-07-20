@@ -29,7 +29,7 @@ var runCapturing = function(callback) {
   var filter = mode == 'normal' ? ('wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter) : 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ';
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
-    ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal', '-e', 'wlan.sa_resolved', '-e', 'wlan.bssid']);
+    ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal', '-e', 'wlan.sa_resolved', '-e', 'wlan_mgt.ssid']);
 
 
   readline.createInterface({
