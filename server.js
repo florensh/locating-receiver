@@ -112,9 +112,9 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   var day = t.getDay();
   if (hours > 7) {
     t.setSeconds(t.getSeconds() - 300);
-
-    if (!lastSent[mac] || lastSent[mac] < t) {
-      lastSent[mac] = new Date();
+    let lastSentKey = mac + '-' + ssid
+    if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
+      lastSent[lastSentKey] = new Date();
       request({
         url: 'https://young-beach-90165.herokuapp.com/signals',
         method: 'POST',
