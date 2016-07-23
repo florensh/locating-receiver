@@ -112,7 +112,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   var day = t.getDay();
   if (hours > 7) {
     t.setSeconds(t.getSeconds() - 300);
-    let lastSentKey = mac + '-' + ssid
+    var lastSentKey = mac + '-' + ssid;
     if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
       lastSent[lastSentKey] = new Date();
       request({
