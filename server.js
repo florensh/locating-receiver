@@ -39,9 +39,9 @@ var runCapturing = function(callback) {
     var a = line.toString().split("\t");
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
-    // if (mode && mode === 'normal') {
-    sendToBackand(a[0], a[1], rssi[0]);
-    // }
+    if (a[4]) {
+      sendToBackand(a[0], a[1], rssi[0], a[4]);
+    }
   });
 
   ts.stderr.on('data', function(data) {
@@ -104,7 +104,7 @@ cleanUp(function() {
 });
 
 
-var sendToBackand = function(timestamp, mac, rssi) {
+var sendToBackand = function(timestamp, mac, rssi, ssid) {
 
   var t = new Date();
   var hours = t.getHours();
@@ -122,7 +122,8 @@ var sendToBackand = function(timestamp, mac, rssi) {
         json: {
           rssi: rssi,
           mac: mac,
-          timestamp: new Date()
+          timestamp: new Date(),
+          ssid: ssid
         }
       }, function(error, response, body) {
         if (error) {
