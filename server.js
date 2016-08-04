@@ -60,6 +60,7 @@ var runCapturing = function(callback) {
 
   ts.on('exit', function(code) {
     console.log('child process exited with code ' + code);
+    cleanUp();
     exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
       if (!error) {
         console.log('putting device in monitor mode successful')
@@ -103,18 +104,18 @@ var resolveMacsToFilter = function(callback) {
 }
 
 var cleanUp = function(callback) {
-  exec('sudo rm -r /tmp', function(error, stdout, stderr) {
-    console.log(error)
-    console.log(stdout)
-    console.log(stderr)
-    callback();
-  });
-}
-cleanUp(function() {
-  resolveMacsToFilter(function() {
-    runCapturing()
-  });
+    exec('sudo rm -r /tmp', function(error, stdout, stderr) {
+      console.log(error)
+      console.log(stdout)
+      console.log(stderr)
+      callback();
+    });
+  }
+  // cleanUp(function() {
+resolveMacsToFilter(function() {
+  runCapturing()
 });
+// });
 
 
 var sendToBackand = function(timestamp, mac, rssi, ssid) {
