@@ -1,6 +1,10 @@
 console.log('starting receiver');
 
 var mode = process.env.mode;
+var backendUrl = process.env.backendUrl;
+var deviceUuid = process.env.RESIN_DEVICE_UUID;
+var sleepStart = process.env.sleepStart;
+var sleepEnd = process.env.sleepEnd;
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -64,7 +68,7 @@ var request = require('request');
 var resolveMacsToFilter = function(callback) {
   // Configure the request
   var options = {
-    url: 'https://young-beach-90165.herokuapp.com/people',
+    url: backendUrl + '/people',
     method: 'GET'
   }
 
@@ -94,6 +98,9 @@ var resolveMacsToFilter = function(callback) {
 
 var cleanUp = function(callback) {
   exec('sudo rm -r /tmp/*', function(error, stdout, stderr) {
+    console.log(error)
+    console.log(stdout)
+    console.log(stderr)
     callback();
   });
 }
@@ -108,22 +115,26 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
 
   var t = new Date();
   var hours = t.getHours();
-  var mins = t.getMinutes();
-  var day = t.getDay();
-  if (hours > 7) {
+  // var mins = t.getMinutes();
+  // var day = t.getDay();
+
+  var sleep = sleepStart < sleepEnd ? hours >= sleepEnd && hours < sleepEnd : hours >= sleepStart || hours < sleepEnd
+
+  if (!sleep) {
     t.setSeconds(t.getSeconds() - 300);
     var lastSentKey = mac + '-' + ssid;
     if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
       lastSent[lastSentKey] = new Date();
       request({
-        url: 'https://young-beach-90165.herokuapp.com/signals',
+        url: backendUrl + '/signals',
         method: 'POST',
 
         json: {
           rssi: rssi,
           mac: mac,
           timestamp: new Date(),
-          ssid: ssid
+          ssid: ssid,
+          receiverUuid: deviceUuid
         }
       }, function(error, response, body) {
         if (error) {
