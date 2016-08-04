@@ -5,6 +5,12 @@ var backendUrl = process.env.backendUrl;
 var deviceUuid = process.env.RESIN_DEVICE_UUID;
 var sleepStart = process.env.sleepStart;
 var sleepEnd = process.env.sleepEnd;
+var sleepStartInt = parseInt(sleepStart)
+var sleepEndInt = parseInt(sleepEnd)
+
+console.log(sleepStart)
+console.log(sleepEndInt)
+
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -118,10 +124,9 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   // var mins = t.getMinutes();
   // var day = t.getDay();
 
-  var sleepStartInt = parseInt(sleepStart)
-  var sleepEndInt = parseInt(sleepEnd)
 
-  var sleep = sleepStartInt < sleepEndInt ? hours >= sleepEndInt && hours < sleepEndInt : hours >= sleepStartInt || hours < sleepEndInt
+
+  var sleep = sleepStartInt < sleepEndInt ? hours >= sleepStartInt && hours < sleepEndInt : hours >= sleepStartInt || hours < sleepEndInt
 
   if (!sleep) {
     t.setSeconds(t.getSeconds() - 300);
