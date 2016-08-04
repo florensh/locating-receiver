@@ -8,9 +8,6 @@ var sleepEnd = process.env.sleepEnd;
 var sleepStartInt = sleepStart && parseInt(sleepStart)
 var sleepEndInt = sleepEnd && parseInt(sleepEnd)
 
-console.log(sleepStart)
-console.log(sleepEndInt)
-
 var macs = [];
 var lastSent = {};
 var readline = require('readline');
@@ -119,8 +116,8 @@ resolveMacsToFilter(function() {
 
 
 var sendToBackand = function(timestamp, mac, rssi, ssid) {
+  var t = new Date();
   if (sleepStartInt && sleepEndInt) {
-    var t = new Date();
 
     var start = new Date()
     start.setHours(sleepStartInt)
