@@ -5,8 +5,8 @@ var backendUrl = process.env.backendUrl;
 var deviceUuid = process.env.RESIN_DEVICE_UUID;
 var sleepStart = process.env.sleepStart;
 var sleepEnd = process.env.sleepEnd;
-var sleepStartInt = parseInt(sleepStart)
-var sleepEndInt = parseInt(sleepEnd)
+var sleepStartInt = sleepStart && parseInt(sleepStart)
+var sleepEndInt = sleepEnd && parseInt(sleepEnd)
 
 console.log(sleepStart)
 console.log(sleepEndInt)
@@ -119,15 +119,21 @@ resolveMacsToFilter(function() {
 
 
 var sendToBackand = function(timestamp, mac, rssi, ssid) {
+  if (sleepStartInt && sleepEndInt) {
+    var t = new Date();
 
-  var t = new Date();
-  var hours = t.getHours();
-  // var mins = t.getMinutes();
-  // var day = t.getDay();
+    var start = new Date()
+    start.setHours(sleepStartInt)
 
+    var end = new Date()
+    end.setHours(sleepEndInt)
+    if (end < start) {
+      end.setDate(end.getDate() + 1)
+    }
 
+    var sleep = t >= start && t < end
 
-  var sleep = sleepStartInt < sleepEndInt ? hours >= sleepStartInt && hours < sleepEndInt : hours >= sleepStartInt || hours < sleepEndInt
+  }
 
   if (!sleep) {
     t.setSeconds(t.getSeconds() - 300);
