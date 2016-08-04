@@ -118,7 +118,10 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   // var mins = t.getMinutes();
   // var day = t.getDay();
 
-  var sleep = sleepStart < sleepEnd ? hours >= sleepEnd && hours < sleepEnd : hours >= sleepStart || hours < sleepEnd
+  var sleepStartInt = parseInt(sleepStart)
+  var sleepEndInt = parseInt(sleepEnd)
+
+  var sleep = sleepStartInt < sleepEndInt ? hours >= sleepEndInt && hours < sleepEndInt : hours >= sleepStartInt || hours < sleepEndInt
 
   if (!sleep) {
     t.setSeconds(t.getSeconds() - 300);
