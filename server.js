@@ -5,8 +5,8 @@ var backendUrl = process.env.backendUrl;
 var deviceUuid = process.env.RESIN_DEVICE_UUID;
 var sleepStart = process.env.sleepStart;
 var sleepEnd = process.env.sleepEnd;
-var sleepStartInt = sleepStart && parseInt(sleepStart)
-var sleepEndInt = sleepEnd && parseInt(sleepEnd)
+var sleepStartInt = parseInt(sleepStart)
+var sleepEndInt = parseInt(sleepEnd)
 
 var macs = [];
 var lastSent = {};
@@ -36,7 +36,7 @@ var runCapturing = function(callback) {
   var filter = mode == 'normal' ? ('wlan.fc.type == 0 && wlan.fc.subtype == 4 ' + macFilter) : 'wlan.fc.type == 0 && wlan.fc.subtype == 4 ';
   console.log('using filter: ' + filter);
   var spawn = require('child_process').spawn,
-    ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal', '-e', 'wlan.sa_resolved', '-e', 'wlan_mgt.ssid']);
+    ts = spawn("stdbuf", ["-oL", "-eL", 'tshark', '-i', 'mon0', '-f', 'broadcast', '-Y', filter, '-T', 'fields', '-e', 'frame.time_epoch', '-e', 'wlan.sa', '-e', 'radiotap.dbm_antsignal', '-e', 'wlan.sa_resolved', '-e', 'wlan_mgt.ssid', '-e', 'wlan.bssid']);
 
 
   readline.createInterface({
