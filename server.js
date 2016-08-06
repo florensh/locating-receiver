@@ -119,7 +119,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   var t = new Date();
   console.log(sleepStartInt)
   console.log(sleepEndInt)
-  if (sleepStartInt && sleepEndInt) {
+  if (sleepStartInt != null && sleepEndInt != null) {
 
     var start = new Date()
     start.setHours(sleepStartInt)
