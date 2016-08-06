@@ -123,9 +123,13 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
 
     var start = new Date()
     start.setHours(sleepStartInt)
+    start.setMinutes(0)
+    start.setSeconds(0)
 
     var end = new Date()
     end.setHours(sleepEndInt)
+    end.setMinutes(0)
+    end.setSeconds(0)
     if (end < start) {
       end.setDate(end.getDate() + 1)
     }
