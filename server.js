@@ -117,8 +117,6 @@ resolveMacsToFilter(function() {
 
 var sendToBackand = function(timestamp, mac, rssi, ssid) {
   var t = new Date();
-  console.log(sleepStartInt)
-  console.log(sleepEndInt)
   if (sleepStartInt != null && sleepEndInt != null) {
 
     var start = new Date()
@@ -135,10 +133,6 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
     }
 
     var sleep = t >= start && t < end
-
-    console.log(start)
-    console.log(end)
-    console.log(sleep)
 
   }
 
