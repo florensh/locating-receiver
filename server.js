@@ -103,7 +103,7 @@ var resolveMacsToFilter = function(callback) {
 }
 
 var cleanUp = function(callback) {
-    exec('sudo rm -r /tmp', function(error, stdout, stderr) {
+    exec('sudo rm -r -f /tmp', function(error, stdout, stderr) {
       console.log(error)
       console.log(stdout)
       console.log(stderr)
