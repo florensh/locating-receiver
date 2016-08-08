@@ -57,17 +57,17 @@ var runCapturing = function(callback) {
 
   ts.on('exit', function(code) {
     console.log('child process exited with code ' + code);
-    cleanUp(function(){
-      exec('sudo airmon-ng start wlan0', function(error, stdout, stderr) {
-        exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
-          if (!error) {
-            console.log('putting device in monitor mode successful')
-            runCapturing();
-          }
-        });
+    // cleanUp(function(){
+    exec('sudo airmon-ng start wlan0', function(error, stdout, stderr) {
+      exec('sudo airmon-ng start wlan1', function(error, stdout, stderr) {
+        if (!error) {
+          console.log('putting device in monitor mode successful')
+          runCapturing();
+        }
       });
-
     });
+
+    // });
   });
 }
 
