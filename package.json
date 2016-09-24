@@ -19,6 +19,7 @@
   "dependencies": {
     "linebyline": "^1.3.0",
     "lodash": "^4.6.1",
+    "raspicam": "^0.2.13",
     "request": "^2.69.0"
   }
 }

@@ -10,9 +10,17 @@ var sleepEndInt = parseInt(sleepEnd)
 
 var macs = [];
 var lastSent = {};
+var macsForImageCapturing = []
 var readline = require('readline');
 var _ = require('lodash');
 var exec = require('child_process').exec;
+var pictureCount = 0
+
+var RaspiCam = require("raspicam");
+var camera = new RaspiCam({
+  mode: 'phote',
+  output: '/tmp/images/capture'
+});
 
 var runCapturing = function(callback) {
 
@@ -47,6 +55,12 @@ var runCapturing = function(callback) {
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
     if (a[4]) {
+      var takePic = _.includes(macsForImageCapturing, [a[2]])
+      if (takePic) {
+        // camera.start();
+        pictureCount = 3
+      }
+
       sendToBackand(a[0], a[1], rssi[0], a[4]);
     }
   });
@@ -84,6 +98,9 @@ var resolveMacsToFilter = function(callback) {
   request(options, function(error, response, body) {
     if (!error && response.statusCode == 200) {
       var people = JSON.parse(body)._embedded.people;
+
+      macsForImageCapturing = _.chain(people).filter(p => p.imageCapturing).map(p => p.devices).flatten().map('mac')
+
       var devices = _.flatMap(people, function(p) {
         return _.filter(p.devices, function(d) {
           return d.enabled;
@@ -98,11 +115,16 @@ var resolveMacsToFilter = function(callback) {
       _(macs).forEach(function(m) {
         lastSent[m] = null;
       });
-
-      callback();
+      if (callback) {
+        callback();
+      }
     }
   })
 }
+
+setInterval(function() {
+  resolveMacsToFilter()
+}, 5 * 60 * 1000);
 
 var cleanUp = function(callback) {
     exec('sudo rm -r -f /tmp', function(error, stdout, stderr) {
@@ -168,6 +190,33 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   } else {
     console.log('skipping - backend in sleep mode!');
   }
-
-
 }
+
+setInterval(function() {
+  if (pictureCount > 0) {
+    camera.start();
+    pictureCount = pictureCount - 1
+  }
+}, 3 * 1000);
+
+camera.on("read", function(err, filename) {
+  var url = backendUrl + '/image/upload'
+  var imgName = deviceUuid + '_' + new Date()
+
+  var formData = {
+    file: {
+      content: fs.createReadStream(filename),
+      originalFilename: imgName
+    }
+  }
+  request.post({
+    url: url,
+    formData: formData
+  }, function optionalCallback(err, httpResponse, body) {
+    if (err) {
+      return console.error('upload failed:', err);
+    }
+    console.log('Upload successful!  Server responded with:', body);
+  });
+
+});
