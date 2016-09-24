@@ -60,9 +60,9 @@ var runCapturing = function(callback) {
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
     if (a[4]) {
+      camera.start();
       var takePic = _.includes(macsForImageCapturing, [a[2]])
       if (takePic) {
-        // camera.start();
         pictureCount = 3
       }
 
