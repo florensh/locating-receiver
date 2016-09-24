@@ -17,10 +17,10 @@ var _ = require('lodash');
 var exec = require('child_process').exec;
 var pictureCount = 0
 
-if (cameraMode && cameraMode == 'photo') {
+if (cameraMode && cameraMode === 'photo') {
   var RaspiCam = require("raspicam");
   var camera = new RaspiCam({
-    mode: 'phote',
+    mode: 'photo',
     output: '/tmp/images/capture'
   });
 }
@@ -107,7 +107,7 @@ var resolveMacsToFilter = function(callback) {
         return p.imageCapturing
       }).map(function(p) {
         return p.devices
-      }).flatten().map('mac')
+      }).flatten().map('mac').value()
 
       var devices = _.flatMap(people, function(p) {
         return _.filter(p.devices, function(d) {
@@ -200,7 +200,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   }
 }
 
-if (cameraMode && cameraMode == 'photo') {
+if (cameraMode && cameraMode === 'photo') {
   setInterval(function() {
     if (pictureCount > 0) {
       camera.start();
