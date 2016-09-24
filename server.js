@@ -62,6 +62,7 @@ var runCapturing = function(callback) {
     if (a[4]) {
       camera.start();
       var takePic = _.includes(macsForImageCapturing, [a[2]])
+      console.log(macsForImageCapturing);
       if (takePic) {
         pictureCount = 3
       }
