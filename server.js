@@ -61,8 +61,8 @@ var runCapturing = function(callback) {
     var rssi = a[2].split(",");
     console.log('Device detected: ' + line);
     if (a[4]) {
-      camera.start();
-      var takePic = _.includes(macsForImageCapturing, [a[2]])
+      // camera.start();
+      var takePic = _.includes(macsForImageCapturing, [a[1]])
       console.log(macsForImageCapturing);
       if (takePic) {
         pictureCount = 3
@@ -220,20 +220,20 @@ if (cameraMode && cameraMode === 'photo') {
     var path = '/tmp/images/' + filename
     console.log(path);
 
-    var formData = {
-      file: {
-        content: fs.createReadStream(path),
-        originalFilename: imgName
-      }
-    }
-    request.post({
-      url: url,
-      formData: formData
-    }, function optionalCallback(err, httpResponse, body) {
-      if (err) {
-        return console.error('upload failed:', err);
-      }
-      console.log('Upload successful!  Server responded with:', body);
-    });
+    // var formData = {
+    //   file: {
+    //     content: fs.createReadStream(path),
+    //     originalFilename: imgName
+    //   }
+    // }
+    // request.post({
+    //   url: url,
+    //   formData: formData
+    // }, function optionalCallback(err, httpResponse, body) {
+    //   if (err) {
+    //     return console.error('upload failed:', err);
+    //   }
+    //   console.log('Upload successful!  Server responded with:', body);
+    // });
   });
 }
