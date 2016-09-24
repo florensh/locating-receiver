@@ -217,7 +217,7 @@ if (cameraMode && cameraMode === 'photo') {
     console.log('picture taken, filename is ' + filename);
     var url = backendUrl + '/image/upload'
     var imgName = deviceUuid + '_' + new Date()
-    var path = '/tmp/images/capture/' + filename
+    var path = '/tmp/images/capture.jpg'
     console.log(path);
 
     var formData = {
