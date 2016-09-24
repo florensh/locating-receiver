@@ -24,7 +24,7 @@ if (cameraMode && cameraMode === 'photo') {
   var RaspiCam = require("raspicam");
   var camera = new RaspiCam({
     mode: 'photo',
-    output: '/tmp/images/capture'
+    output: '/tmp/images/capture.jpg'
   });
 }
 
@@ -218,6 +218,7 @@ if (cameraMode && cameraMode === 'photo') {
     var url = backendUrl + '/image/upload'
     var imgName = deviceUuid + '_' + new Date()
     var path = '/tmp/images/capture/' + filename
+    console.log(path);
 
     var formData = {
       file: {
