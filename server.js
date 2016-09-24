@@ -8,6 +8,7 @@ var sleepStart = process.env.sleepStart;
 var sleepEnd = process.env.sleepEnd;
 var sleepStartInt = parseInt(sleepStart)
 var sleepEndInt = parseInt(sleepEnd)
+var fs = require("fs");
 
 var macs = [];
 var lastSent = {};
