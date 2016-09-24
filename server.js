@@ -213,7 +213,7 @@ if (cameraMode && cameraMode === 'photo') {
     }
   }, 3 * 1000);
 
-  camera.on("read", function(err, filename) {
+  camera.on("read", function(err, timestamp, filename) {
     console.log('picture taken, filename is ' + filename);
     var url = backendUrl + '/image/upload'
     var imgName = deviceUuid + '_' + new Date()
@@ -222,7 +222,7 @@ if (cameraMode && cameraMode === 'photo') {
 
     var formData = {
       file: {
-        content: fs.createReadStream(path),
+        content: fs.createReadStream(filename),
         originalFilename: imgName
       }
     }
