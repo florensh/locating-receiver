@@ -204,6 +204,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
 
 if (cameraMode && cameraMode === 'photo') {
   setInterval(function() {
+    console.log('photo intervall, picture count is ' + pictureCount);
     if (pictureCount > 0) {
       camera.start();
       pictureCount = pictureCount - 1
@@ -211,6 +212,7 @@ if (cameraMode && cameraMode === 'photo') {
   }, 3 * 1000);
 
   camera.on("read", function(err, filename) {
+    console.log('picture taken, filename is ' + filename);
     var url = backendUrl + '/image/upload'
     var imgName = deviceUuid + '_' + new Date()
 
