@@ -24,7 +24,7 @@ if (cameraMode && cameraMode === 'photo') {
   var RaspiCam = require("raspicam");
   var camera = new RaspiCam({
     mode: 'photo',
-    output: '/tmp/images/capture.jpg'
+    output: '/tmp/images/capture_%d.jpg'
   });
 }
 
