@@ -17,7 +17,9 @@ var _ = require('lodash');
 var exec = require('child_process').exec;
 var pictureCount = 0
 
+console.log('camera mode is ' + cameraMode);
 if (cameraMode && cameraMode === 'photo') {
+  console.log('init camera!');
   var RaspiCam = require("raspicam");
   var camera = new RaspiCam({
     mode: 'photo',
