@@ -63,10 +63,10 @@ var runCapturing = function(callback) {
     if (a[4]) {
       // camera.start();
       var takePic = _.includes(macsForImageCapturing, [a[1]])
-      console.log(macsForImageCapturing);
-      if (takePic) {
+      console.log(takePic);
+      // if (takePic) {
         pictureCount = 3
-      }
+      // }
 
       sendToBackand(a[0], a[1], rssi[0], a[4]);
     }
