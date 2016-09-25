@@ -234,7 +234,13 @@ if (cameraMode && cameraMode === 'photo') {
         if (err) throw err; // Fail if the file can't be read.
 
         var formData = {
-          image: data
+          image: {
+            value: data,
+            options: {
+              filename: imgName,
+              contentType: 'image/jpg'
+            }
+          }
         }
         request.post({
           url: url,
