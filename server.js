@@ -224,8 +224,9 @@ if (cameraMode && cameraMode === 'photo') {
     console.log(path);
 
     var lastChar = filename.slice(-1);
-
+    console.log(lastChar);
     if (lastChar !== '~') {
+      console.log('sending image to backend');
       var formData = {
         file: {
           content: fs.createReadStream(path),
