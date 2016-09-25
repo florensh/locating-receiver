@@ -219,7 +219,7 @@ if (cameraMode && cameraMode === 'photo') {
   camera.on("read", function(err, timestamp, filename) {
     console.log('picture taken, filename is ' + filename);
     var url = backendUrl + '/image/upload'
-    var imgName = deviceUuid + '_' + new Date().toISOString()
+    var imgName = deviceUuid + '_' + new Date(timestamp).toISOString()
     var path = '/tmp/images/' + filename
     console.log(path);
 
