@@ -62,11 +62,11 @@ var runCapturing = function(callback) {
     console.log('Device detected: ' + line);
     if (a[4]) {
       // camera.start();
-      var takePic = _.includes(macsForImageCapturing, [a[1]])
+
       var theMac = _.filter(macsForImageCapturing, function(x) {
         return x === a[1]
       })
-      console.log(takePic);
+
       if (theMac.length > 0) {
         pictureCount = 1
       }
@@ -227,21 +227,43 @@ if (cameraMode && cameraMode === 'photo') {
     console.log(lastChar);
     if (lastChar !== '~') {
       console.log('sending image to backend');
-      var formData = {
-        file: {
-          content: fs.createReadStream(path),
-          originalFilename: imgName
-        }
-      }
-      request.post({
-        url: url,
-        formData: formData
-      }, function optionalCallback(err, httpResponse, body) {
-        if (err) {
-          return console.error('upload failed:', err);
-        }
-        console.log('Upload successful!  Server responded with:', body);
+
+
+      // var formData = {
+      //   file: {
+      //     content: fs.createReadStream(path),
+      //     originalFilename: imgName
+      //   }
+      // }
+      // request.post({
+      //   url: url,
+      //   formData: formData
+      // }, function optionalCallback(err, httpResponse, body) {
+      //   if (err) {
+      //     return console.error('upload failed:', err);
+      //   }
+      //   console.log('Upload successful!  Server responded with:', body);
+      // });
+
+      fs.readFile('image.jpg', function(err, data) {
+        if (err) throw err; // Fail if the file can't be read.
+
+        var req = request.post(url, function(err, resp, body) {
+          if (err) {
+            console.log('Error!');
+          } else {
+            console.log('URL: ' + body);
+          }
+        });
+        var form = req.form();
+        form.append('file', data, {
+          filename: imgName,
+          contentType: 'image/jpg'
+        });
+
       });
+
+
 
     }
 
