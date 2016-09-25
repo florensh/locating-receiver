@@ -229,37 +229,40 @@ if (cameraMode && cameraMode === 'photo') {
       console.log('sending image to backend');
 
 
-      // var formData = {
-      //   file: {
-      //     content: fs.createReadStream(path),
-      //     originalFilename: imgName
-      //   }
-      // }
-      // request.post({
-      //   url: url,
-      //   formData: formData
-      // }, function optionalCallback(err, httpResponse, body) {
-      //   if (err) {
-      //     return console.error('upload failed:', err);
-      //   }
-      //   console.log('Upload successful!  Server responded with:', body);
-      // });
 
       fs.readFile(path, function(err, data) {
         if (err) throw err; // Fail if the file can't be read.
 
-        var req = request.post(url, function(err, resp, body) {
+        var formData = {
+          image: data
+        }
+        request.post({
+          url: url,
+          formData: formData
+        }, function optionalCallback(err, httpResponse, body) {
           if (err) {
-            console.log('Error!');
-          } else {
-            console.log('URL: ' + body);
+            return console.error('upload failed:', err);
           }
+          console.log('Upload successful!  Server responded with:', body);
         });
-        var form = req.form();
-        form.append('image', data, {
-          filename: imgName,
-          contentType: 'image/jpg'
-        });
+
+
+
+
+
+
+        // var req = request.post(url, function(err, resp, body) {
+        //   if (err) {
+        //     console.log('Error!');
+        //   } else {
+        //     console.log('URL: ' + body);
+        //   }
+        // });
+        // var form = req.form();
+        // form.append('image', data, {
+        //   filename: imgName,
+        //   contentType: 'image/jpg'
+        // });
 
       });
 
