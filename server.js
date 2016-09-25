@@ -24,7 +24,7 @@ if (cameraMode && cameraMode === 'photo') {
   var RaspiCam = require("raspicam");
   var camera = new RaspiCam({
     mode: 'photo',
-    output: '/tmp/images/capture_%d.jpg'
+    output: '/tmp/images/capture.jpg'
   });
 }
 
@@ -245,7 +245,7 @@ if (cameraMode && cameraMode === 'photo') {
       //   console.log('Upload successful!  Server responded with:', body);
       // });
 
-      fs.readFile('image.jpg', function(err, data) {
+      fs.readFile(path, function(err, data) {
         if (err) throw err; // Fail if the file can't be read.
 
         var req = request.post(url, function(err, resp, body) {
@@ -256,7 +256,7 @@ if (cameraMode && cameraMode === 'photo') {
           }
         });
         var form = req.form();
-        form.append('file', data, {
+        form.append('image', data, {
           filename: imgName,
           contentType: 'image/jpg'
         });
