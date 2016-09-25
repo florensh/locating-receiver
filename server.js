@@ -169,7 +169,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
   }
 
   if (!sleep) {
-    t.setSeconds(t.getSeconds() - 300);
+    t.setSeconds(t.getSeconds() - 0);
     var lastSentKey = mac + '-' + ssid;
     if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
 
