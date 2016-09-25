@@ -62,15 +62,6 @@ var runCapturing = function(callback) {
     console.log('Device detected: ' + line);
     if (a[4]) {
       // camera.start();
-
-      var theMac = _.filter(macsForImageCapturing, function(x) {
-        return x === a[1]
-      })
-
-      if (theMac.length > 0) {
-        pictureCount = 1
-      }
-
       sendToBackand(a[0], a[1], rssi[0], a[4]);
     }
   });
@@ -181,6 +172,16 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
     t.setSeconds(t.getSeconds() - 300);
     var lastSentKey = mac + '-' + ssid;
     if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
+
+      var theMac = _.filter(macsForImageCapturing, function(x) {
+        return x === a[1]
+      })
+
+      if (theMac.length > 0) {
+        pictureCount = 3
+      }
+
+
       lastSent[lastSentKey] = new Date();
       request({
         url: backendUrl + '/signals',
@@ -214,7 +215,7 @@ if (cameraMode && cameraMode === 'photo') {
       camera.start();
       pictureCount = pictureCount - 1
     }
-  }, 10 * 1000);
+  }, 3 * 1000);
 
   camera.on("read", function(err, timestamp, filename) {
     console.log('picture taken, filename is ' + filename);
