@@ -223,20 +223,26 @@ if (cameraMode && cameraMode === 'photo') {
     var path = '/tmp/images/' + filename
     console.log(path);
 
-    // var formData = {
-    //   file: {
-    //     content: fs.createReadStream(path),
-    //     originalFilename: imgName
-    //   }
-    // }
-    // request.post({
-    //   url: url,
-    //   formData: formData
-    // }, function optionalCallback(err, httpResponse, body) {
-    //   if (err) {
-    //     return console.error('upload failed:', err);
-    //   }
-    //   console.log('Upload successful!  Server responded with:', body);
-    // });
+    var lastChar = filename.slice(-1);
+
+    if (lastChar !== '~') {
+      var formData = {
+        file: {
+          content: fs.createReadStream(path),
+          originalFilename: imgName
+        }
+      }
+      request.post({
+        url: url,
+        formData: formData
+      }, function optionalCallback(err, httpResponse, body) {
+        if (err) {
+          return console.error('upload failed:', err);
+        }
+        console.log('Upload successful!  Server responded with:', body);
+      });
+
+    }
+
   });
 }
