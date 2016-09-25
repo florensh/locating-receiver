@@ -63,10 +63,13 @@ var runCapturing = function(callback) {
     if (a[4]) {
       // camera.start();
       var takePic = _.includes(macsForImageCapturing, [a[1]])
+      var theMac = _.filter(macsForImageCapturing, function(x) {
+        return x === a[1]
+      })
       console.log(takePic);
-      // if (takePic) {
-        pictureCount = 3
-      // }
+      if (theMac.length > 0) {
+        pictureCount = 1
+      }
 
       sendToBackand(a[0], a[1], rssi[0], a[4]);
     }
@@ -211,7 +214,7 @@ if (cameraMode && cameraMode === 'photo') {
       camera.start();
       pictureCount = pictureCount - 1
     }
-  }, 3 * 1000);
+  }, 10 * 1000);
 
   camera.on("read", function(err, timestamp, filename) {
     console.log('picture taken, filename is ' + filename);
