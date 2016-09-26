@@ -215,7 +215,7 @@ if (cameraMode && cameraMode === 'photo') {
       camera.start();
       pictureCount = pictureCount - 1
     }
-  }, 3 * 1000);
+  }, 10 * 1000);
 
   camera.on("read", function(err, timestamp, filename) {
     console.log('picture taken, filename is ' + filename);
