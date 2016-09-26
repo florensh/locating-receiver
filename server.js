@@ -174,7 +174,7 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
     if (!lastSent[lastSentKey] || lastSent[lastSentKey] < t) {
 
       var theMac = _.filter(macsForImageCapturing, function(x) {
-        return x === a[1]
+        return x === mac
       })
 
       if (theMac.length > 0) {
