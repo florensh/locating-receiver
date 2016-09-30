@@ -210,8 +210,8 @@ var sendToBackand = function(timestamp, mac, rssi, ssid) {
 
 if (cameraMode && cameraMode === 'photo') {
   setInterval(function() {
-    console.log('photo intervall, picture count is ' + pictureCount);
     if (pictureCount > 0) {
+      console.log('photo intervall, picture count is ' + pictureCount);
       camera.start();
       pictureCount = pictureCount - 1
     }
