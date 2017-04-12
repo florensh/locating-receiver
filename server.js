@@ -140,11 +140,11 @@ var cleanUp = function(callback) {
       callback();
     });
   }
-  // cleanUp(function() {
+   cleanUp(function() {
 resolveMacsToFilter(function() {
   runCapturing()
 });
-// });
+ });
 
 
 var sendToBackand = function(timestamp, mac, rssi, ssid) {
