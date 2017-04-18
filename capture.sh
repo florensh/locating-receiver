@@ -129,7 +129,7 @@ set -o nounset
 # https://www.mail-archive.com/bug-bash@gnu.org/msg12170.html
 #
 # Short form: set -e
-set -o errexit
+#set -o errexit
 
 # Return value of a pipeline is the value of the last (rightmost) command to
 # exit with a non-zero status, or zero if all commands in the pipeline exit
