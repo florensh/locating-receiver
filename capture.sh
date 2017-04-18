@@ -467,12 +467,14 @@ _initialize(){
   _debug printf ">> Performing initialization...\n"
   printf "Deleting old tmp files...\n"
   rm -r /tmp
+  printf "Putting device into monitor mode...\n"
+  airmon-ng start wlan0
   printf "Using backend url: %s\n" "${_BACKEND}"
 }
 
 _capture(){
   _print_ascii_art
-  airmon-ng start wlan0
+
   printf "Sniff dog up and running!\n\n"
   stdbuf -oL tshark -i mon0 -I -f 'broadcast' -R 'wlan.fc.type == 0 && wlan.fc.subtype == 4' -T fields -e frame.time_epoch -e wlan.sa -e radiotap.dbm_antsignal > tshark.log
 
