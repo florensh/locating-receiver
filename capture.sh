@@ -464,7 +464,9 @@ _simple() {
 }
 
 _initialize(){
-  _debug printf ">> Performing initialization...\n"  
+  _debug printf ">> Performing initialization...\n"
+  printf "Deleting old tmp files...\n"  
+  rm -r /tmp
   printf "Using backend url: %s\n" "${_BACKEND}"
 }
 
