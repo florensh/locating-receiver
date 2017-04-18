@@ -465,14 +465,14 @@ _simple() {
 
 _initialize(){
   _debug printf ">> Performing initialization...\n"
-  printf "Deleting old tmp files...\n"  
+  printf "Deleting old tmp files...\n"
   rm -r /tmp
   printf "Using backend url: %s\n" "${_BACKEND}"
 }
 
 _capture(){
   _print_ascii_art
-  printf "Sniff dog up and running!\n"
+  printf "Sniff dog up and running!\n\n"
 }
 
 ###############################################################################
