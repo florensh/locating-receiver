@@ -1,0 +1,20 @@
+# base-image for python on any machine using a template variable,
+# see more about dockerfile templates here: http://docs.resin.io/deployment/docker-templates/
+# and about resin base images here: http://docs.resin.io/runtime/resin-base-images/
+FROM resin/%%RESIN_MACHINE_NAME%%-debian
+
+# install required packages
+RUN apt-get update && apt-get install -y libssl-dev aircrack-ng iw && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install tshark && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+
+# copy all files in our root to the working directory
+COPY . /app
+
+# enable systemd init system in the container
+ENV INITSYSTEM on
+
+# scan.sh will run when the container starts up on the device
+CMD ["bash", "/app/capture.sh -h"]
