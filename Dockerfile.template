@@ -14,8 +14,5 @@ WORKDIR /usr/src/app
 # Copy everything into the container
 COPY . ./
 
-# enable systemd init system in the container
-ENV INITSYSTEM on
-
 # capture.sh will run when the container starts up on the device
 CMD ["bash", "capture.sh"]

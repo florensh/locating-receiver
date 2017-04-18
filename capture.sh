@@ -342,7 +342,10 @@ _PRINT_HELP=0
 _USE_DEBUG=0
 
 # Initialize additional expected option variables.
-_BACKEND=""
+if [ -z "${backendUrl+1}" ]; then
+  _die printf "backendUrl is not defined\n"
+fi
+_BACKEND=$backendUrl
 _OPTION_X=0
 _SHORT_OPTION_WITH_PARAMETER=""
 _LONG_OPTION_WITH_PARAMETER=""
@@ -461,11 +464,8 @@ _simple() {
 }
 
 _initialize(){
-  _debug printf ">> Performing initialization...\n"
-  if [[ -n "${_BACKEND}" ]];
-  then
-    printf "Running with backend: %s\n" "${_BACKEND}"
-  fi
+  _debug printf ">> Performing initialization...\n"  
+  printf "Using backend url: %s\n" "${_BACKEND}"
 }
 
 _capture(){
