@@ -473,6 +473,7 @@ _initialize(){
 }
 
 _capture(){
+  printf "----------------------------------------------------------------------"
   _print_ascii_art
 
   printf "Sniff dog up and running!\n\n"
