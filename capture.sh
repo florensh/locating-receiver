@@ -466,7 +466,7 @@ _simple() {
 _initialize(){
   _debug printf ">> Performing initialization...\n"
   printf "Deleting old tmp files...\n"
-  rm -r /tmp
+  #rm -r /tmp
   printf "Putting device into monitor mode...\n"
   airmon-ng start wlan0
   printf "Using backend url: %s\n" "${_BACKEND}"
