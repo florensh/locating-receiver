@@ -477,6 +477,7 @@ _capture(){
   _print_ascii_art
 
   printf "Sniff dog up and running!\n\n"
+  printf "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
   stdbuf -oL tshark -i mon0 -I -f 'broadcast' -R 'wlan.fc.type == 0 && wlan.fc.subtype == 4' -T fields -e frame.time_epoch -e wlan.sa -e radiotap.dbm_antsignal > tshark.log
 
   tail -f tshark.log
