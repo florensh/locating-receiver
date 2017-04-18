@@ -8,13 +8,14 @@ RUN apt-get update && apt-get install -y libssl-dev aircrack-ng iw && \
     DEBIAN_FRONTEND=noninteractive apt-get -y -q install tshark && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Set the working directory
+WORKDIR /usr/src/app
 
-
-# copy all files in our root to the working directory
-COPY . /app
+# Copy everything into the container
+COPY . ./
 
 # enable systemd init system in the container
 ENV INITSYSTEM on
 
-# scan.sh will run when the container starts up on the device
-CMD ["bash", "/app/capture.sh -h"]
+# capture.sh will run when the container starts up on the device
+CMD ["bash", "capture.sh"]

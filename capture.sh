@@ -238,16 +238,8 @@ die() {
 #
 # Print the program help information.
 _print_help() {
-  cat <<HEREDOC
-     _                 _
- ___(_)_ __ ___  _ __ | | ___   _
-/ __| | '_ \` _ \| '_ \| |/ _ \_| |_
-\__ \ | | | | | | |_) | |  __/_   _|
-|___/_|_| |_| |_| .__/|_|\___| |_|
-                |_|
-
-Boilerplate for creating a simple bash script with some basic strictness
-checks and help features, and easy debug printing, and basic option handling.
+  cat <<"EOT"
+Receiver for sending wifi probe requests to a backend.
 
 Usage:
   ${_ME} [--options] [<arguments>]
@@ -255,7 +247,7 @@ Usage:
 
 Options:
   -h --help  Display this help information.
-HEREDOC
+EOT
 }
 
 ###############################################################################
@@ -428,6 +420,27 @@ done
 # Program Functions
 ###############################################################################
 
+_print_ascii_art(){
+  cat <<"EOT"
+
+
+                     _,)
+             _..._.-;-'
+          .-'     `(
+         /      ;   \
+        ;.' ;`  ,;  ;
+       .'' ``. (  \ ;
+      / f_ _L \ ;  )\
+      \/|` '|\/;; <;/
+     ((; \_/  (()
+          "
+           SNIFF
+             SNIFF
+
+
+EOT
+}
+
 _simple() {
   _debug printf ">> Performing operation...\n"
 
@@ -455,6 +468,11 @@ _initialize(){
   fi
 }
 
+_capture(){
+  _print_ascii_art
+  printf "Sniff dog up and running!\n"
+}
+
 ###############################################################################
 # Main
 ###############################################################################
@@ -467,12 +485,14 @@ _initialize(){
 # Description:
 #   Entry point for the program, handling basic option parsing and dispatching.
 _main() {
+
   if ((_PRINT_HELP))
   then
     _print_help
   else
     _initialize "${@}"
-    _simple "${@}"
+    _capture "${@}"
+#    _simple "${@}"
   fi
 }
 
