@@ -1,10 +1,4 @@
 #!/usr/bin/env bash
-#       _                 _
-#   ___(_)_ __ ___  _ __ | | ___   _
-#  / __| | '_ ` _ \| '_ \| |/ _ \_| |_
-#  \__ \ | | | | | | |_) | |  __/_   _|
-#  |___/_|_| |_| |_| .__/|_|\___| |_|
-#                  |_|
 #
 # Boilerplate for creating a simple bash script with some basic strictness
 # checks, help features, easy debug printing.
@@ -129,7 +123,7 @@ set -o nounset
 # https://www.mail-archive.com/bug-bash@gnu.org/msg12170.html
 #
 # Short form: set -e
-#set -o errexit
+set -o errexit
 
 # Return value of a pipeline is the value of the last (rightmost) command to
 # exit with a non-zero status, or zero if all commands in the pipeline exit
@@ -238,7 +232,7 @@ die() {
 #
 # Print the program help information.
 _print_help() {
-  cat <<"EOT"
+  cat <<HEREDOC
 Receiver for sending wifi probe requests to a backend.
 
 Usage:
@@ -246,8 +240,9 @@ Usage:
   ${_ME} -h | --help
 
 Options:
-  -h --help  Display this help information.
-EOT
+  -h --help     Display this help information.
+  -b --backend  Backend mode
+HEREDOC
 }
 
 ###############################################################################
@@ -340,12 +335,13 @@ unset options
 # Initialize program option variables.
 _PRINT_HELP=0
 _USE_DEBUG=0
+_BACKEND_URL=""
+_MONI="mon0"
+_INTERFACE="wlan1"
+_MODE="monitor"
 
 # Initialize additional expected option variables.
-if [ -z "${backendUrl+1}" ]; then
-  _die printf "backendUrl is not defined\n"
-fi
-_BACKEND=${backendUrl}
+_BACKEND=0
 _OPTION_X=0
 _SHORT_OPTION_WITH_PARAMETER=""
 _LONG_OPTION_WITH_PARAMETER=""
@@ -398,10 +394,8 @@ do
       _SHORT_OPTION_WITH_PARAMETER="${__maybe_param}"
        shift
       ;;
-    -b)
-      _require_argument "${__option}" "${__maybe_param}"
-      _BACKEND="${__maybe_param}"
-      shift
+    -b|--backend)
+      _BACKEND=1
       ;;
     --long-option-with-argument)
       _require_argument "${__option}" "${__maybe_param}"
@@ -427,18 +421,18 @@ _print_ascii_art(){
   cat <<"EOT"
 
 
-                     _,)
-             _..._.-;-'
-          .-'     `(
-         /      ;   \
-        ;.' ;`  ,;  ;
-       .'' ``. (  \ ;
-      / f_ _L \ ;  )\
-      \/|` '|\/;; <;/
-     ((; \_/  (()
-          "
-           SNIFF
-             SNIFF
+                        _,)
+                _..._.-;-'
+             .-'     `(
+            /      ;   \
+           ;.' ;`  ,;  ;
+          .'' ``. (  \ ;
+         / f_ _L \ ;  )\
+         \/|` '|\/;; <;/
+        ((; \_/  (()
+             "
+              SNIFF
+                SNIFF
 
 
 EOT
@@ -463,24 +457,51 @@ _simple() {
   fi
 }
 
+
+###############################################################################
+# Initialize
+###############################################################################
 _initialize(){
-  _debug printf ">> Performing initialization...\n"
-  printf "Deleting old tmp files...\n"
-  #rm -r /tmp
-  printf "Putting device into monitor mode...\n"
-  airmon-ng start wlan0
-  printf "Using backend url: %s\n" "${_BACKEND}"
+  # check if in backend mode
+  if((_BACKEND))
+  then
+    printf "Running in backend mode!\n"
+    # print error if backendUrl is not present as env variable. Define env
+    # variables via resin.io application or device configuration
+    if [ -z "${backendUrl+1}" ]; then
+      _die printf "Running in backend mode but backendUrl is not defined as environment variable!\n"
+    fi
+    _BACKEND_URL="${backendUrl}"
+    printf "Using backend url: %s\n" "${_BACKEND_URL}"
+  fi
+
+  # checking if wifi interface already in monitor mode.
+  if [[ !  -z  $(iwconfig 2>&1 | grep $_MONI)  ]]; then
+    printf "Found wifi interface in monitor mode\n"
+  else
+    for line in $(iw dev | grep phy); do
+      # check if device supports monitor mode
+      if [[ !  -z  $(iw phy ${line/\#/''} info | grep $_MODE) ]]; then
+        printf "putting ${line/\#/''} into monitor mode!\n"
+        sudo iw phy ${line/\#/''} interface add $_MONI type monitor
+        sudo ifconfig mon0 up
+        break
+      fi
+    done
+  fi
 }
 
+
+###############################################################################
+# Capture
+###############################################################################
 _capture(){
-  printf "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+  # printf "Starting capturing...\n\n"
   _print_ascii_art
 
-  printf "Sniff dog up and running!\n\n"
-  printf "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
-  stdbuf -oL tshark -i mon0 -I -f 'broadcast' -R 'wlan.fc.type == 0 && wlan.fc.subtype == 4' -T fields -e frame.time_epoch -e wlan.sa -e radiotap.dbm_antsignal > tshark.log
+  printf "*** Sniff dog up and running! ***\n\n"
+  stdbuf -oL tshark -i mon0 -I -f 'broadcast' -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != ""' -T fields -e frame.time_epoch -e wlan.sa -e radiotap.dbm_antsignal -e wlan.sa_resolved -e wlan_mgt.ssid
 
-  tail -f tshark.log
 }
 
 ###############################################################################

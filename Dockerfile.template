@@ -6,6 +6,7 @@ FROM resin/%%RESIN_MACHINE_NAME%%-debian
 # install required packages
 RUN apt-get update && apt-get install -y libssl-dev aircrack-ng iw && \
     DEBIAN_FRONTEND=noninteractive apt-get -y -q install tshark && \
+    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
