@@ -335,10 +335,11 @@ unset options
 # Initialize program option variables.
 _PRINT_HELP=0
 _USE_DEBUG=0
-_BACKEND_URL=""
+_BACKEND_URL="https://young-beach-90165.herokuapp.com"
+_POST_URI="/signals"
 _MONI="mon0"
 _INTERFACE="wlan1"
-_MODE="monitor"
+_WIFI_INTERFACE_MODE="monitor"
 
 # Initialize additional expected option variables.
 _BACKEND=0
@@ -438,6 +439,8 @@ _print_ascii_art(){
 EOT
 }
 
+
+
 _simple() {
   _debug printf ">> Performing operation...\n"
 
@@ -479,15 +482,22 @@ _initialize(){
   if [[ !  -z  $(iwconfig 2>&1 | grep $_MONI)  ]]; then
     printf "Found wifi interface in monitor mode\n"
   else
+    printf "No wifi interface in monitor mode, searching for devices...\n"
     for line in $(iw dev | grep phy); do
       # check if device supports monitor mode
-      if [[ !  -z  $(iw phy ${line/\#/''} info | grep $_MODE) ]]; then
-        printf "putting ${line/\#/''} into monitor mode!\n"
+      if [[ !  -z  $(iw phy ${line/\#/''} info | grep $_WIFI_INTERFACE_MODE) ]]; then
+        printf "putting ${line/\#/''} into monitor mode...\n"
         sudo iw phy ${line/\#/''} interface add $_MONI type monitor
         sudo ifconfig mon0 up
         break
       fi
     done
+    # checking again if wifi interface in monitor mode.
+    if [[ !  -z  $(iwconfig 2>&1 | grep $_MONI)  ]]; then
+      printf "Wifi interface in monitor mode now available!\n"
+    else
+      _die printf "Could not start wifi interface in monitor mode!\n"
+    fi
   fi
 }
 
@@ -499,8 +509,26 @@ _capture(){
   # printf "Starting capturing...\n\n"
   _print_ascii_art
 
-  printf "*** Sniff dog up and running! ***\n\n"
-  stdbuf -oL tshark -i mon0 -I -f 'broadcast' -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != ""' -T fields -e frame.time_epoch -e wlan.sa -e radiotap.dbm_antsignal -e wlan.sa_resolved -e wlan_mgt.ssid
+  printf "******************* Sniff dog up and running! *******************\n\n"
+  stdbuf -oL tshark -i mon0 -I \
+      -f 'broadcast' \
+      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != ""' \
+      -T fields \
+        -e frame.time_epoch \
+        -e wlan.sa \
+        -e radiotap.dbm_antsignal \
+        -e wlan.sa_resolved \
+        -e wlan_mgt.ssid \
+  | while read epoch sa antsignal sa_resolved ssid; do
+    rssi=$(echo $antsignal | cut -f1 -d,)
+    if((_BACKEND))
+    then
+      # sending data to backend
+      curl --silent -i -H "Content-Type:application/json" \
+      -d "{  \"timestamp\" : \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\",  \"mac\" : \"$sa\", \"ssid\" : \"$ssid\", \"receiverUuid\" : \"test\", \"rssi\" : \"$rssi\" }" "$_BACKEND_URL$_POST_URI" > /dev/null ;
+    fi
+      printf "mac: %s, rssi: %s, ssid: %s\n" $sa $rssi $ssid
+  done
 
 }
 

@@ -16,4 +16,4 @@ WORKDIR /usr/src/app
 COPY . ./
 
 # capture.sh will run when the container starts up on the device
-CMD ["bash", "capture.sh"]
+CMD ["bash", "capture.sh --backend"]
