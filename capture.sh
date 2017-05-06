@@ -465,6 +465,10 @@ _simple() {
 # Initialize
 ###############################################################################
 _initialize(){
+
+  # delete tmp folder
+  rm -r tmp
+
   # check if in backend mode
   if((_BACKEND))
   then
