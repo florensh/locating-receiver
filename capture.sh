@@ -468,6 +468,7 @@ _initialize(){
 
   # delete tmp folder
   rm -r /tmp
+  sleep 5
 
   # check if in backend mode
   if((_BACKEND))
