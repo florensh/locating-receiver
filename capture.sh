@@ -336,6 +336,7 @@ unset options
 _PRINT_HELP=0
 _USE_DEBUG=0
 _BACKEND_URL="https://young-beach-90165.herokuapp.com"
+_RECEIVER_UUID="unknown"
 _POST_URI="/signals"
 _MONI="mon0"
 _INTERFACE="wlan1"
@@ -479,6 +480,10 @@ _initialize(){
     if [ -z "${backendUrl+1}" ]; then
       _die printf "Running in backend mode but backendUrl is not defined as environment variable!\n"
     fi
+    if [ -z "${RESIN_DEVICE_UUID+1}" ]; then
+      _die printf "Running in backend mode but RESIN_DEVICE_UUID is not defined as environment variable!\n"
+    fi
+    _RECEIVER_UUID="${RESIN_DEVICE_UUID}"
     _BACKEND_URL="${backendUrl}"
     printf "Using backend url: %s\n" "${_BACKEND_URL}"
   fi
@@ -530,7 +535,7 @@ _capture(){
     then
       # sending data to backend
       curl --silent -i -H "Content-Type:application/json" \
-      -d "{  \"timestamp\" : \"$(date -d @$epoch -u +"%Y-%m-%dT%H:%M:%SZ")\",  \"mac\" : \"$sa\", \"ssid\" : \"$ssid\", \"receiverUuid\" : \"test\", \"rssi\" : \"$rssi\" }" "$_BACKEND_URL$_POST_URI" > /dev/null ;
+      -d "{  \"timestamp\" : \"$(date -d @$epoch -u +"%Y-%m-%dT%H:%M:%SZ")\",  \"mac\" : \"$sa\", \"ssid\" : \"$ssid\", \"receiverUuid\" : \"$_RECEIVER_UUID\", \"rssi\" : \"$rssi\" }" "$_BACKEND_URL$_POST_URI" > /dev/null ;
     fi
       printf "mac: %s, rssi: %s, ssid: %s\n" $sa $rssi $ssid
   done
