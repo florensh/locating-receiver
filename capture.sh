@@ -467,7 +467,8 @@ _simple() {
 _initialize(){
 
   # delete tmp folder
-  rm -r /tmp/*
+  rm -r /tmp
+  mkdir /tmp
 
   # check if in backend mode
   if((_BACKEND))
