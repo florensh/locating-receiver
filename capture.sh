@@ -336,7 +336,7 @@ unset options
 _PRINT_HELP=0
 _USE_DEBUG=0
 _BACKEND_URL="https://young-beach-90165.herokuapp.com"
-_RECEIVER_UUID="unknown"
+_RECEIVER_UUID=${RESIN_DEVICE_UUID:-"unknown"}
 _POST_URI="/signals"
 _MONI="mon0"
 _INTERFACE="wlan1"
@@ -482,7 +482,7 @@ _initialize(){
     fi
 
     _BACKEND_URL="${backendUrl}"
-    _RECEIVER_UUID=${RESIN_DEVICE_UUID:-"unknown"}
+
     printf "Using backend url: %s\n" "${_BACKEND_URL}"
   fi
 
