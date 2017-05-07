@@ -533,22 +533,23 @@ _capture(){
     rssi=$(echo $antsignal | cut -f1 -d,)
     if((_BACKEND))
     then
-      # sending data to backend
+      # sending the signals to the backend
       curl "$_BACKEND_URL$_POST_URI" \
       --silent \
       -i \
       -H "Content-Type:application/json" \
-      -d
+      -d \
       "
       {
         \"timestamp\" : \"$(date -d @$epoch -u +"%Y-%m-%dT%H:%M:%SZ")\",
         \"mac\" : \"$sa\",
         \"ssid\" : \"$ssid\",
         \"receiverUuid\" : \"$_RECEIVER_UUID\",
-        \"rssi\" : \"$rssi\" 
+        \"rssi\" : \"$rssi\"
       }
       " > /dev/null ;
     fi
+      # print the captured signals to the console
       printf "mac: %s, rssi: %s, ssid: %s\n" $sa $rssi $ssid
   done
 
