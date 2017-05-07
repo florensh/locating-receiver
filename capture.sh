@@ -480,10 +480,8 @@ _initialize(){
     if [ -z "${backendUrl+1}" ]; then
       _die printf "Running in backend mode but backendUrl is not defined as environment variable!\n"
     fi
-    if [ -z "${RESIN_DEVICE_UUID+1}" ]; then
-      _die printf "Running in backend mode but RESIN_DEVICE_UUID is not defined as environment variable!\n"
-    fi
-    _RECEIVER_UUID="${RESIN_DEVICE_UUID}"
+
+    _RECEIVER_UUID=${RESIN_DEVICE_UUID1:-"unknown"}
     _BACKEND_URL="${backendUrl}"
     printf "Using backend url: %s\n" "${_BACKEND_URL}"
   fi
