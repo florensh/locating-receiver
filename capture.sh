@@ -519,7 +519,7 @@ _initialize(){
 _capture(){
 
   _print_ascii_art
-
+  printf "current hour is %s\n" $(date +"%H")
   printf "******************* Sniff dog up and running! *******************\n\n"
   stdbuf -oL tshark -i mon0 -I \
       -f 'broadcast' \
@@ -535,7 +535,7 @@ _capture(){
     current_hour=$(date +"%H")
     if((_BACKEND))
     then
-      printf "current hour is %s\n" $current_hour
+      printf "current hour is %s\n" $(date +"%H")
       if (( "$current_hour" < 20 || "$current_hour" > 21 )); then
 
         # sending the signals to the backend
