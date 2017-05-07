@@ -533,7 +533,7 @@ _capture(){
   | while read epoch sa antsignal sa_resolved ssid; do
     rssi=$(echo $antsignal | cut -f1 -d,)
     current_hour=$(date +"%H")
-    if((_BACKEND && (current_hour<1 || current_hour>8)))
+    if((_BACKEND && (current_hour<20 || current_hour>21)))
     then
       # sending the signals to the backend
       curl "$_BACKEND_URL$_POST_URI" \
