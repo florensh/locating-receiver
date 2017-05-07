@@ -536,7 +536,7 @@ _capture(){
     if((_BACKEND))
     then
       printf "current hour is %s\n" $(date +"%H")
-      if (( "$current_hour" < 20 || "$current_hour" > 21 )); then
+      if (( "$current_hour" < 18 || "$current_hour" > 19 )); then
 
         # sending the signals to the backend
         curl "$_BACKEND_URL$_POST_URI" \
