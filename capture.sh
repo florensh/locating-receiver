@@ -535,8 +535,8 @@ _capture(){
     current_hour=$(date +"%H")
     if((_BACKEND))
     then
-      printf "current hour is %s\n" $(date +"%H")
-      if (( "$current_hour" < 18 || "$current_hour" > 19 )); then
+      # check for sleep mode
+      if (( "$current_hour" < "$_SLEEP_START" || "$current_hour" > "$_SLEEP_END" )); then
 
         # sending the signals to the backend
         curl "$_BACKEND_URL$_POST_URI" \
