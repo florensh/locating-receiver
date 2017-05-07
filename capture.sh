@@ -519,7 +519,7 @@ _initialize(){
 _capture(){
 
   _print_ascii_art
-  printf "current hour is %s\n" $(date +"%H")
+
   printf "******************* Sniff dog up and running! *******************\n\n"
   stdbuf -oL tshark -i mon0 -I \
       -f 'broadcast' \
