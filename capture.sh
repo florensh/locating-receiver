@@ -481,8 +481,8 @@ _initialize(){
       _die printf "Running in backend mode but backendUrl is not defined as environment variable!\n"
     fi
 
-    _RECEIVER_UUID=${RESIN_DEVICE_UUID1:-"unknown"}
     _BACKEND_URL="${backendUrl}"
+    _RECEIVER_UUID=${RESIN_DEVICE_UUID:-"unknown"}
     printf "Using backend url: %s\n" "${_BACKEND_URL}"
   fi
 
