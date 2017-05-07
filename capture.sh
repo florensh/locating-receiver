@@ -516,14 +516,15 @@ _initialize(){
 # Capture
 ###############################################################################
 _capture(){
-  # printf "Starting capturing...\n\n"
+
   _print_ascii_art
 
   printf "******************* Sniff dog up and running! *******************\n\n"
   stdbuf -oL tshark -i mon0 -I \
       -f 'broadcast' \
-      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != ""' \
+      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != "" && radiotap.dbm_antsignal != ""' \
       -T fields \
+        # timestamp of beacon frame
         -e frame.time_epoch \
         -e wlan.sa \
         -e radiotap.dbm_antsignal \
