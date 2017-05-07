@@ -534,8 +534,8 @@ _capture(){
     if((_BACKEND))
     then
       # sending data to backend
-      curl --silent -i -H "Content-Type:application/json" \
-      -d "{  \"timestamp\" : \"$(date -d @$epoch -u +"%Y-%m-%dT%H:%M:%SZ")\",  \"mac\" : \"$sa\", \"ssid\" : \"$ssid\", \"receiverUuid\" : \"$_RECEIVER_UUID\", \"rssi\" : \"$rssi\" }" "$_BACKEND_URL$_POST_URI" > /dev/null ;
+      curl "$_BACKEND_URL$_POST_URI" --silent -i -H "Content-Type:application/json" \
+      -d "{  \"timestamp\" : \"$(date -d @$epoch -u +"%Y-%m-%dT%H:%M:%SZ")\",  \"mac\" : \"$sa\", \"ssid\" : \"$ssid\", \"receiverUuid\" : \"$_RECEIVER_UUID\", \"rssi\" : \"$rssi\" }" > /dev/null ;
     fi
       printf "mac: %s, rssi: %s, ssid: %s\n" $sa $rssi $ssid
   done
