@@ -522,13 +522,13 @@ _capture(){
   printf "******************* Sniff dog up and running! *******************\n\n"
   stdbuf -oL tshark -i mon0 -I \
       -f 'broadcast' \
-      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != "" && radiotap.dbm_antsignal != 0' \
+      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != ""' \
       -T fields \
-        -e frame.time_epoch \ # timestamp of beacon frame
-        -e wlan.sa \
-        -e radiotap.dbm_antsignal \
-        -e wlan.sa_resolved \
-        -e wlan_mgt.ssid \
+        -e frame.time_epoch \                       # timestamp of beacon frame
+        -e wlan.sa \                                # mac address
+        -e radiotap.dbm_antsignal \                 # signal strength
+        -e wlan.sa_resolved \                       # mac address with vendor information
+        -e wlan_mgt.ssid \                          # ssid of beacon
   | while read epoch sa antsignal sa_resolved ssid; do
     rssi=$(echo $antsignal | cut -f1 -d,)
     if((_BACKEND))
