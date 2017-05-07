@@ -535,7 +535,7 @@ _capture(){
     current_hour=$(date +"%H")
     if((_BACKEND))
     then
-      printf "current hour is %s" $current_hour
+      printf "current hour is %s\n" $current_hour
       if (( "$current_hour" < 20 || "$current_hour" > 21 )); then
 
         # sending the signals to the backend
