@@ -522,9 +522,9 @@ _capture(){
   printf "******************* Sniff dog up and running! *******************\n\n"
   stdbuf -oL tshark -i mon0 -I \
       -f 'broadcast' \
-      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != "" && radiotap.dbm_antsignal != ""' \
+      -Y 'wlan.fc.type == 0 && wlan.fc.subtype == 4 && wlan_mgt.ssid != "" && radiotap.dbm_antsignal != 0' \
       -T fields \
-        -e frame.time_epoch \
+        -e frame.time_epoch \ # timestamp of beacon frame
         -e wlan.sa \
         -e radiotap.dbm_antsignal \
         -e wlan.sa_resolved \
